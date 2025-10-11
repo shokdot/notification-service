@@ -3,7 +3,10 @@ FROM node:20
 WORKDIR /app
 
 COPY apps/core/package*.json ./apps/core/
+COPY apps/core/tsconfig.json ./apps/core/
+
 COPY apps/notification-service/package*.json ./apps/notification-service/
+COPY apps/notification-service/tsconfig.json ./apps/notification-service/
 
 WORKDIR /app/apps/core
 RUN npm install
@@ -15,8 +18,11 @@ COPY apps/notification-service/prisma ./prisma
 RUN npx prisma generate
 
 WORKDIR /app
-COPY apps/core ./apps/core
+COPY apps/core/src ./apps/core/src
 COPY apps/notification-service ./apps/notification-service
+
+WORKDIR /app/apps/core
+RUN npm run build
 
 WORKDIR /app/apps/notification-service
 
