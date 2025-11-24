@@ -1,24 +1,30 @@
 FROM node:20
 
-WORKDIR /app
+WORKDIR /apps
 
-COPY apps/core/package*.json ./apps/core/
-COPY apps/notification-service/package*.json ./apps/notification-service/
+COPY core/package*.json core/
+COPY core/tsconfig.json core/
 
-WORKDIR /app/apps/core
+COPY notification-service/package*.json notification-service/
+COPY notification-service/tsconfig.json notification-service/
+
+WORKDIR /apps/core
 RUN npm install
 
-WORKDIR /app/apps/notification-service
+WORKDIR /apps/notification-service
 RUN npm install
 
-COPY apps/notification-service/prisma ./prisma
+COPY notification-service/prisma ./prisma
 RUN npx prisma generate
 
-WORKDIR /app
-COPY apps/core ./apps/core
-COPY apps/notification-service ./apps/notification-service
+WORKDIR /apps
+COPY core/src core/src
+COPY notification-service/src notification-service/src
 
-WORKDIR /app/apps/notification-service
+WORKDIR /apps/core
+RUN npm run build
+
+WORKDIR /apps/notification-service
 
 EXPOSE 3002
 
