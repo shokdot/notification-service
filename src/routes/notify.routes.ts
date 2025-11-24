@@ -6,10 +6,10 @@ import {
 	markReadHandler,
 	markAllReadHandler,
 	deleteNotificationHandler
-} from '@controllers/notification/index.js'
+} from '@controllers/index.js'
 import serviceAuth from '@core/middlewares/serviceAuth.middleware.js'
 
-export default async function notifyRoutes(app: FastifyInstance): Promise<void> {
+export default async function notifyRoutes(app: FastifyInstance): Promise<void> { // schema
 	app.get('/', { preHandler: authenticate }, getNotificationsHandler); //done
 	app.post('/', { preHandler: serviceAuth }, createNotifcationHandler); //done
 	app.patch('/:id/read', { preHandler: authenticate }, markReadHandler); //done except param

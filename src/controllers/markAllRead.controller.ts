@@ -8,6 +8,7 @@ const markReadHandler = async (request: AuthRequest, reply: FastifyReply) => {
 		const { userId } = request;
 
 		await markAllRead(userId);
+
 		return reply.status(200).send({
 			status: 'success',
 			message: 'All notifications marked as read.',

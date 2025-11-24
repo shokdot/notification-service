@@ -8,7 +8,10 @@ const markReadHandler = async (request: AuthRequest<undefined, undefined, { id: 
 		const { userId } = request;
 		const { id } = request.params;
 
+		//zod, dto
+
 		await markRead(id, userId);
+
 		return reply.status(200).send({
 			status: 'success',
 			message: 'Notification marked as read successfully.',
