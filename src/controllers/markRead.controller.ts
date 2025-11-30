@@ -2,13 +2,14 @@ import { sendError } from "@core/index.js";
 import { AuthRequest } from "@core/types/authRequest.js";
 import { FastifyReply } from "fastify";
 import { markRead } from '@services/notification/index.js';
+import notificationByIdDTO from "src/dto/notification-by-id.dto.js";
 
-const markReadHandler = async (request: AuthRequest<undefined, undefined, { id: string }>, reply: FastifyReply) => {
+const markReadHandler = async (request: AuthRequest<undefined, undefined, notificationByIdDTO>, reply: FastifyReply) => {
 	try {
 		const { userId } = request;
 		const { id } = request.params;
 
-		//zod, dto
+		//zod
 
 		await markRead(id, userId);
 

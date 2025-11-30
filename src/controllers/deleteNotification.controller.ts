@@ -2,13 +2,14 @@ import { FastifyReply } from "fastify";
 import { AuthRequest } from '@core/types/authRequest.js'
 import { deleteNotification } from '@services/notification/index.js';
 import { sendError } from "@core/index.js";
+import notificationByIdDTO from "src/dto/notification-by-id.dto.js";
 
-const deleteNotificationHandler = async (request: AuthRequest<undefined, undefined, { id: string }>, reply: FastifyReply) => {
+const deleteNotificationHandler = async (request: AuthRequest<undefined, undefined, notificationByIdDTO>, reply: FastifyReply) => {
 	try {
 		const { id } = request.params;
 		const { userId } = request;
 
-		//dto, zod
+		//zod
 
 		await deleteNotification(id, userId);
 
