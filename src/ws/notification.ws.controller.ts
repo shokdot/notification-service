@@ -3,6 +3,7 @@ import { WebSocket } from "ws";
 import { notificationSockets } from "src/wsManager/socketInstances.js";
 import authenticateWs from "@core/utils/authenticate.ws.js";
 import { AppError } from "@core/utils/AppError.js";
+import wsAuthError from "@core/utils/wsAuthError.js";
 
 const wsNotificationHandler = async (ws: WebSocket, request: FastifyRequest) => {
 	try {
@@ -16,19 +17,11 @@ const wsNotificationHandler = async (ws: WebSocket, request: FastifyRequest) => 
 			notificationSockets.remove(userId);
 		});
 
-	} catch (error) { // check it full
-		if (error instanceof AppError) { // change it // separate wsAuthError
-			switch (error.code) {
-				case 'ACCESS_TOKEN_MISSING':
-					ws.close(1008, 'ACCESS_TOKEN_MISSING');
-					break;
-				case 'INVALID_ACCESS_TOKEN':
-					ws.close(1008, 'INVALID_ACCESS_TOKEN');
-					break;
-				default: // no need this
-					ws.close(1011, "INTERNAL_SERVER_ERROR");
-			}
-		}
+	} catch (error) {
+		if (error instanceof AppError)
+			wsAuthError(error.code, ws);
+
+		ws.close(1011, "INTERNAL_SERVER_ERROR");
 	}
 };
 

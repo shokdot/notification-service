@@ -2,6 +2,8 @@ import { FastifyRequest } from "fastify";
 import { WebSocket } from "ws";
 import { updateStatus } from '@services/status/index.js';
 import authenticateWs from '@core/utils/authenticate.ws.js'
+import { AppError } from "@core/utils/AppError.js";
+import wsAuthError from "@core/utils/wsAuthError.js";
 
 const wsStatusHandler = async (ws: WebSocket, request: FastifyRequest) => {
 	try {
@@ -17,18 +19,16 @@ const wsStatusHandler = async (ws: WebSocket, request: FastifyRequest) => {
 		})
 
 	} catch (error) {
+		if (error instanceof AppError) {
+			wsAuthError(error.code, ws);
+		}
 		switch (error.code) {
-			case 'ACCESS_TOKEN_MISSING': // separate wsAuthError
-				ws.close(1008, 'ACCESS_TOKEN_MISSING');
-				break;
-			case 'INVALID_ACCESS_TOKEN':
-				ws.close(1008, 'INVALID_ACCESS_TOKEN');
-				break;
 			case "USER_NOT_FOUND":
 				ws.close(1008, "USER_NOT_FOUND");
 				break;
-			default: // no need this
+			default:
 				ws.close(1011, "INTERNAL_SERVER_ERROR");
+				break;
 		}
 	}
 };
