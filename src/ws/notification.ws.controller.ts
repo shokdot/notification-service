@@ -1,6 +1,6 @@
 import { FastifyRequest } from "fastify";
 import { WebSocket } from "ws";
-import { notificationSockets } from "src/wsManager/socketInstances.service.js";
+import { notificationSockets } from "src/wsManager/socketInstances.js";
 import authenticateWs from "@core/utils/authenticate.ws.js";
 import { AppError } from "@core/utils/AppError.js";
 

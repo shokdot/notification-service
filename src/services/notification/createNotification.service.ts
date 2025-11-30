@@ -1,5 +1,5 @@
 import prisma from "src/utils/prismaClient.js";
-import { notificationSockets } from "src/wsManager/socketInstances.service.js";
+import { notificationSockets } from "src/wsManager/socketInstances.js";
 
 const createNotification = async (userId: string, type: string, message: string) => {
 
