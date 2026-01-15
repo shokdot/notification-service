@@ -10,12 +10,12 @@ const wsStatusHandler = async (ws: WebSocket, request: FastifyRequest) => {
 
 		const authResult = authenticateWs(request.headers['authorization'], ws);
 
-		const { token } = authResult;
+		const { userId } = authResult;
 
-		await updateStatus(token, 'ONLINE');
+		await updateStatus(userId, 'ONLINE');
 
 		ws.on('close', async () => {
-			await updateStatus(token, 'OFFLINE');
+			await updateStatus(userId, 'OFFLINE');
 		})
 
 	} catch (error) {
