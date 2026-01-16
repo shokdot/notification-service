@@ -9,8 +9,6 @@ const deleteNotificationHandler = async (request: AuthRequest<undefined, undefin
 		const { id } = request.params;
 		const { userId } = request;
 
-		//zod
-
 		await deleteNotification(id, userId);
 
 		return reply.status(200).send({

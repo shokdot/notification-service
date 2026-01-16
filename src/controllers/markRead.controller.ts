@@ -9,8 +9,6 @@ const markReadHandler = async (request: AuthRequest<undefined, undefined, notifi
 		const { userId } = request;
 		const { id } = request.params;
 
-		//zod
-
 		await markRead(id, userId);
 
 		return reply.status(200).send({

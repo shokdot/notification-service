@@ -6,7 +6,7 @@ import createNotificationDTO from "src/dto/create-notification.dto.js";
 
 const createNotifcationHandler = async (request: AuthRequest<createNotificationDTO>, reply: FastifyReply) => {
 	try {
-		const { userId, type, message } = request.body; //zod ?
+		const { userId, type, message } = request.body;
 
 		await createNotification(userId, type, message);
 
