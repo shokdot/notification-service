@@ -1,17 +1,13 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import { notificationSockets } from "src/wsManager/socketInstances.js";
-import { sendError } from "@core/index.js";
+import { broadcastNotification } from "@services/internal/index.js";
 import { BroadcastBody } from "src/dto/broadcast-body.dto.js";
+import { sendError } from "@core/index.js";
 
 const broadcastNotificationHandler = async (request: FastifyRequest<{ Body: BroadcastBody }>, reply: FastifyReply) => {
     try {
         const { type, message } = request.body;
 
-        notificationSockets.broadcast({
-            type,
-            message,
-            createdAt: new Date(),
-        });
+        broadcastNotification(type, message);
 
         return reply.status(200).send({
             status: 'success',

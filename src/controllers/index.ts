@@ -1,6 +1,0 @@
-export { default as createNotifcationHandler } from './createNotification.controller.js'
-export { default as getNotificationsHandler } from './getNotifications.controller.js'
-export { default as markReadHandler } from './markRead.controller.js'
-export { default as markAllReadHandler } from './markAllRead.controller.js'
-export { default as deleteNotificationHandler } from './deleteNotification.controller.js'
-export { default as broadcastNotificationHandler } from './broadcastNotification.controller.js'

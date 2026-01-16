@@ -1,4 +1,3 @@
-export { default as createNotification } from './createNotification.service.js'
 export { default as getNotifications } from './getNotifications.service.js'
 export { default as markRead } from './markRead.service.js'
 export { default as markAllRead } from './markAllRead.service.js'

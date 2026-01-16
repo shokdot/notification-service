@@ -7,8 +7,11 @@ import deleteNotificationSchema from './delete.schema.js';
 
 export const basic = {
 	getNotifications: getNotificationsSchema,
-	createNotification: createNotificationSchema,
 	markRead: markReadSchema,
 	markAllRead: markAllReadSchema,
 	deleteNotification: deleteNotificationSchema
 };
+
+export const internal = {
+	createNotification: createNotificationSchema
+}
