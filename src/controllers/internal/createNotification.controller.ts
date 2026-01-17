@@ -1,6 +1,6 @@
 import { FastifyReply } from "fastify";
 import { AuthRequest } from "@core/types/authRequest.js";
-import { createNotification } from '@services/notification/index.js'
+import { createNotification } from '@services/internal/index.js'
 import { sendError } from "@core/index.js";
 import createNotificationDTO from "src/dto/create-notification.dto.js";
 
