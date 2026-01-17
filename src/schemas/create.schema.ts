@@ -8,7 +8,7 @@ const createNotificationSchema: RouteShorthandOptions =
 	schema:
 	{
 		description: "Create Notification",
-		tags: ["Notification"],
+		tags: ["Internal"],
 		body: {
 			type: 'object',
 			required: ['userId', 'type', 'message'],
