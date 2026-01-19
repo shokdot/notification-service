@@ -14,4 +14,4 @@ async function registerRoutes(app: FastifyInstance) {
 	await app.register(notificationRoutes, { prefix: `${API_PREFIX}/notifications` });
 }
 
-startServer(app, registerRoutes, HOST, PORT);
+startServer(app, registerRoutes, HOST, PORT, SERVICE_NAME);
