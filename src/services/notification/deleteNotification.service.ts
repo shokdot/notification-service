@@ -1,4 +1,4 @@
-import { AppError } from "@core/utils/AppError.js";
+import { AppError } from "@core/index.js";
 import prisma from "src/utils/prismaClient.js";
 
 const deleteNotification = async (id: string, userId: string) => {

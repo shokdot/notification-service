@@ -1,7 +1,6 @@
 import { FastifyReply } from "fastify";
-import { AuthRequest } from '@core/types/authRequest.js'
 import { getNotifications } from '@services/notification/index.js'
-import { sendError } from "@core/index.js";
+import { sendError, AuthRequest } from "@core/index.js";
 
 const getNotificationsHandler = async (request: AuthRequest, reply: FastifyReply) => {
 	try {

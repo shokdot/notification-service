@@ -1,6 +1,5 @@
-import { sendError } from "@core/index.js";
-import { AuthRequest } from "@core/types/authRequest.js";
 import { FastifyReply } from "fastify";
+import { sendError, AuthRequest } from "@core/index.js";
 import { markRead } from '@services/notification/index.js';
 import notificationByIdDTO from "src/dto/notification-by-id.dto.js";
 

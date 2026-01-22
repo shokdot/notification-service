@@ -1,9 +1,7 @@
 import { FastifyRequest } from "fastify";
 import { WebSocket } from "ws";
 import { notificationSockets } from "src/wsManager/socketInstances.js";
-import authenticateWs from "@core/utils/authenticate.ws.js";
-import { AppError } from "@core/utils/AppError.js";
-import wsAuthError from "@core/utils/wsAuthError.js";
+import { authenticateWs, AppError, wsAuthError } from "@core/index.js";
 
 const wsNotificationHandler = async (ws: WebSocket, request: FastifyRequest) => {
 	try {

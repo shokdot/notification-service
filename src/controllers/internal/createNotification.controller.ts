@@ -1,7 +1,6 @@
 import { FastifyReply } from "fastify";
-import { AuthRequest } from "@core/types/authRequest.js";
 import { createNotification } from '@services/internal/index.js'
-import { sendError } from "@core/index.js";
+import { sendError, AuthRequest } from "@core/index.js";
 import createNotificationDTO from "src/dto/create-notification.dto.js";
 
 const createNotifcationHandler = async (request: AuthRequest<createNotificationDTO>, reply: FastifyReply) => {
