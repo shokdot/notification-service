@@ -1,6 +1,6 @@
 import { FastifyReply } from "fastify";
 import { markAllRead } from '@services/notification/index.js'
-import { sendError, AuthRequest } from "@core/index.js";
+import { sendError, AuthRequest, AppError } from "@core/index.js";
 
 const markReadHandler = async (request: AuthRequest, reply: FastifyReply) => {
 	try {
@@ -13,7 +13,10 @@ const markReadHandler = async (request: AuthRequest, reply: FastifyReply) => {
 			message: 'All notifications marked as read.',
 		});
 
-	} catch (error) {
+	} catch (error: any) {
+		if (error instanceof AppError) {
+			return sendError(reply, error);
+		}
 		return sendError(reply, 500, 'INTERNAL_SERVER_ERROR', 'Internal server error');
 	}
 };

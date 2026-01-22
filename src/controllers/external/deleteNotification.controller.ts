@@ -1,6 +1,6 @@
 import { FastifyReply } from "fastify";
 import { deleteNotification } from '@services/notification/index.js';
-import { sendError, AuthRequest } from "@core/index.js";
+import { sendError, AuthRequest, AppError } from "@core/index.js";
 import notificationByIdDTO from "src/dto/notification-by-id.dto.js";
 
 const deleteNotificationHandler = async (request: AuthRequest<undefined, undefined, notificationByIdDTO>, reply: FastifyReply) => {
@@ -15,13 +15,11 @@ const deleteNotificationHandler = async (request: AuthRequest<undefined, undefin
 			message: 'Notification successfuly deleted.',
 		});
 
-	} catch (error) {
-		switch (error.code) {
-			case 'NOT_FOUND':
-				return sendError(reply, 404, error.code, 'Not found notification with given id and userId');
-			default:
-				return sendError(reply, 500, 'INTERNAL_SERVER_ERROR', 'Internal server error');
+	} catch (error: any) {
+		if (error instanceof AppError) {
+			return sendError(reply, error);
 		}
+		return sendError(reply, 500, 'INTERNAL_SERVER_ERROR', 'Internal server error');
 	}
 };
 

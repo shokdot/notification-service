@@ -1,6 +1,6 @@
 import { FastifyReply } from "fastify";
 import { getNotifications } from '@services/notification/index.js'
-import { sendError, AuthRequest } from "@core/index.js";
+import { sendError, AuthRequest, AppError } from "@core/index.js";
 
 const getNotificationsHandler = async (request: AuthRequest, reply: FastifyReply) => {
 	try {
@@ -13,7 +13,10 @@ const getNotificationsHandler = async (request: AuthRequest, reply: FastifyReply
 			message: data.count > 0 ? "Notifications retrieved successfully" : "No notifications found"
 		});
 
-	} catch (error) {
+	} catch (error: any) {
+		if (error instanceof AppError) {
+			return sendError(reply, error);
+		}
 		return sendError(reply, 500, 'INTERNAL_SERVER_ERROR', 'Internal server error');
 	}
 };
