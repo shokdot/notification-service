@@ -1,2 +1,3 @@
 export { default as createNotifcationHandler } from './createNotification.controller.js';
 export { default as broadcastNotificationHandler } from './broadcastNotification.controller.js';
+export { default as notifyFriendsStatusChangeHandler } from './notifyFriendsStatusChange.controller.js';
