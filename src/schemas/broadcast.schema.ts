@@ -14,7 +14,7 @@ const broadcastNotificationSchema: RouteShorthandOptions =
 			additionalProperties: false,
 			properties: {
 				type: { type: 'string' },
-				message: { type: 'string' }
+				message: { type: 'object' }
 			}
 		},
 		response: {
