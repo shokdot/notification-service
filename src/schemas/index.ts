@@ -6,6 +6,7 @@ import markAllReadSchema from './markAll.schema.js';
 import deleteNotificationSchema from './delete.schema.js';
 import broadcastNotificationSchema from './broadcast.schema.js';
 import notifyFriendsStatusChangeSchema from './notifyFriendsStatusChange.schema.js';
+import sendToUserSchema from './sendToUser.schema.js';
 
 export const basic = {
 	getNotifications: getNotificationsSchema,
@@ -18,4 +19,5 @@ export const internal = {
 	createNotification: createNotificationSchema,
 	broadcastNotification: broadcastNotificationSchema,
 	notifyFriendsStatusChange: notifyFriendsStatusChangeSchema,
+	sendToUser: sendToUserSchema
 }
