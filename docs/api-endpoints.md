@@ -82,17 +82,17 @@ Delete a notification. **Auth: Bearer**
 
 ### GET `/ws` (WebSocket)
 
-Real-time notifications stream. **Auth:** Bearer token when opening the WebSocket.
+Real-time notifications stream. **Auth:** Bearer token via `Authorization` header OR `?token=<accessToken>` query parameter.
 
 **URL:** `ws://{host}:{port}/api/v1/notifications/ws` (or `wss://` in production)
 
-**Connection:** On connect, server may push new notifications. Message format is service-specific (e.g. type, message, id, createdAt).
+**Connection:** On connect, server may push new notifications. Message format: `{ id, type, message, createdAt }`.
 
 ---
 
 ### GET `/status/ws` (WebSocket)
 
-Real-time status updates (e.g. friends online/offline). **Auth:** Bearer token when opening the WebSocket.
+Real-time status updates (e.g. friends online/offline). **Auth:** Bearer token via `Authorization` header OR `?token=<accessToken>` query parameter.
 
 **URL:** `ws://{host}:{port}/api/v1/notifications/status/ws` (or `wss://` in production)
 

@@ -57,7 +57,9 @@ How a **React/Next.js** frontend should use the Notification Service: HTTP API a
 
 **URL:** `ws://{host}:{port}/api/v1/notifications/ws` (use `wss://` in production)
 
-**Flow:** Open WebSocket with Bearer token (header or query, as supported). On message, parse JSON and add/update notification in UI (e.g. toast or list). On close/error, optionally reconnect after refreshing token.
+**Auth:** Bearer token via `Authorization` header OR `?token=<accessToken>` query parameter. The query parameter approach is required for browser WebSocket connections since the browser WebSocket API does not support custom headers.
+
+**Flow:** Open WebSocket with token. On message, parse JSON (`{ id, type, message, createdAt }`) and add/update notification in UI (e.g. toast or list). On close/error, reconnect after a delay (optionally refresh token first).
 
 ---
 
@@ -67,7 +69,11 @@ How a **React/Next.js** frontend should use the Notification Service: HTTP API a
 
 **URL:** `ws://{host}:{port}/api/v1/notifications/status/ws` (use `wss://` in production)
 
-**Flow:** Open WebSocket with Bearer token. On message, update status for the relevant user(s) in UI.
+**Auth:** Bearer token via `Authorization` header OR `?token=<accessToken>` query parameter.
+
+**Message format:** `{ type: "friend-status-changed", data: { userId, status, timestamp } }` where `status` is `"ONLINE"`, `"IN_GAME"`, or `"OFFLINE"`.
+
+**Flow:** Open WebSocket with token. On connect, the backend sets the user's status to `ONLINE`. On message, parse JSON and update the relevant friend's status indicator in the UI. On disconnect, the backend sets the user's status to `OFFLINE` and notifies their friends.
 
 ---
 
