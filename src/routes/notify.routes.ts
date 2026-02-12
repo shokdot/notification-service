@@ -5,6 +5,8 @@ import {
 	markReadHandler,
 	markAllReadHandler,
 	deleteNotificationHandler,
+	getPreferencesHandler,
+	updatePreferencesHandler,
 } from '@controllers/external/index.js';
 
 export default async function notifyRoutes(app: FastifyInstance): Promise<void> {
@@ -12,4 +14,6 @@ export default async function notifyRoutes(app: FastifyInstance): Promise<void> 
 	app.patch('/:id/read', basic.markRead, markReadHandler);
 	app.patch('/read-all', basic.markAllRead, markAllReadHandler);
 	app.delete('/:id', basic.deleteNotification, deleteNotificationHandler);
+	app.get('/preferences', basic.getPreferences, getPreferencesHandler);
+	app.put('/preferences', basic.updatePreferences, updatePreferencesHandler);
 }

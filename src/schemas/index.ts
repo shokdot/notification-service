@@ -7,12 +7,16 @@ import deleteNotificationSchema from './delete.schema.js';
 import broadcastNotificationSchema from './broadcast.schema.js';
 import notifyFriendsStatusChangeSchema from './notifyFriendsStatusChange.schema.js';
 import sendToUserSchema from './sendToUser.schema.js';
+import getPreferencesSchema from './getPreferences.schema.js';
+import updatePreferencesSchema from './updatePreferences.schema.js';
 
 export const basic = {
 	getNotifications: getNotificationsSchema,
 	markRead: markReadSchema,
 	markAllRead: markAllReadSchema,
-	deleteNotification: deleteNotificationSchema
+	deleteNotification: deleteNotificationSchema,
+	getPreferences: getPreferencesSchema,
+	updatePreferences: updatePreferencesSchema
 };
 
 export const internal = {

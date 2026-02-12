@@ -78,6 +78,51 @@ Delete a notification. **Auth: Bearer**
 
 ---
 
+### GET `/preferences`
+
+Get notification preferences for the current user. **Auth: Bearer**
+
+If no preferences have been saved yet, returns defaults: `gameInvites: true`, `friendRequests: true`, `matchResults: true`, `systemUpdates: false`, `sounds: true`.
+
+**Success (200):**
+
+```json
+{
+  "status": "success",
+  "data": {
+    "gameInvites": true,
+    "friendRequests": true,
+    "matchResults": true,
+    "systemUpdates": false,
+    "sounds": true
+  }
+}
+```
+
+---
+
+### PUT `/preferences`
+
+Update notification preferences for the current user. **Auth: Bearer**
+
+All fields are optional; only provided fields are updated.
+
+**Body:**
+
+```json
+{
+  "gameInvites": true,
+  "friendRequests": true,
+  "matchResults": true,
+  "systemUpdates": false,
+  "sounds": true
+}
+```
+
+**Success (200):** `{ "status": "success", "message": "string" }`
+
+---
+
 ## WebSocket
 
 ### GET `/ws` (WebSocket)
@@ -108,11 +153,13 @@ Endpoints under `/internal` (create, send to user, broadcast, notify friends sta
 
 ## Summary
 
-| Method      | Path         | Auth   | Purpose              |
-|-------------|--------------|--------|----------------------|
-| GET         | `/`          | Bearer | Get notifications    |
-| PATCH       | `/:id/read`  | Bearer | Mark one as read     |
-| PATCH       | `/read-all`  | Bearer | Mark all as read     |
-| DELETE      | `/:id`       | Bearer | Delete notification  |
-| WebSocket   | `/ws`        | Bearer | Real-time notifications |
-| WebSocket   | `/status/ws` | Bearer | Real-time status     |
+| Method      | Path           | Auth   | Purpose                |
+|-------------|----------------|--------|------------------------|
+| GET         | `/`            | Bearer | Get notifications      |
+| PATCH       | `/:id/read`    | Bearer | Mark one as read       |
+| PATCH       | `/read-all`    | Bearer | Mark all as read       |
+| DELETE      | `/:id`         | Bearer | Delete notification    |
+| GET         | `/preferences` | Bearer | Get preferences        |
+| PUT         | `/preferences` | Bearer | Update preferences     |
+| WebSocket   | `/ws`          | Bearer | Real-time notifications |
+| WebSocket   | `/status/ws`   | Bearer | Real-time status       |

@@ -14,3 +14,14 @@ model Notification {
     isRead    Boolean  @default(false)
     createdAt DateTime @default(now())
 }
+
+model NotificationPreference {
+    id             String   @id @default(uuid())
+    userId         String   @unique
+    gameInvites    Boolean  @default(true)
+    friendRequests Boolean  @default(true)
+    matchResults   Boolean  @default(true)
+    systemUpdates  Boolean  @default(false)
+    sounds         Boolean  @default(true)
+    updatedAt      DateTime @updatedAt
+}
