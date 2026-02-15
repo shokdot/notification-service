@@ -4,7 +4,8 @@ import {
 	createNotifcationHandler,
 	broadcastNotificationHandler,
 	notifyFriendsStatusChangeHandler,
-	sendToUserHandler
+	sendToUserHandler,
+	deleteUserHandler
 } from '@controllers/internal/index.js';
 
 export default async function internalRoutes(app: FastifyInstance): Promise<void> {
@@ -12,4 +13,5 @@ export default async function internalRoutes(app: FastifyInstance): Promise<void
 	app.post('/broadcast', internal.broadcastNotification, broadcastNotificationHandler);
 	app.post('/send', internal.sendToUser, sendToUserHandler as any);
 	app.post('/status/notify-friends', internal.notifyFriendsStatusChange, notifyFriendsStatusChangeHandler);
+	app.delete('/:userId', deleteUserHandler as any);
 }

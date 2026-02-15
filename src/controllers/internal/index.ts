@@ -2,3 +2,4 @@ export { default as createNotifcationHandler } from './createNotification.contro
 export { default as broadcastNotificationHandler } from './broadcastNotification.controller.js';
 export { default as notifyFriendsStatusChangeHandler } from './notifyFriendsStatusChange.controller.js';
 export { default as sendToUserHandler } from './sendToUser.controller.js';
+export { default as deleteUserHandler } from './deleteUser.controller.js';
