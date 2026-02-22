@@ -1,12 +1,8 @@
 # Notification Service
 
-Notification microservice for the ft_transcendence platform. Handles in-app notifications (list, mark read, mark all read, delete) and WebSocket streams for real-time notifications and status updates.
+> Part of the [ft_transcendence](https://github.com/shokdot/ft_transcendence) project.
 
-## Features
-
-- **HTTP API**: Get notifications, mark one/all as read, delete notification (Bearer auth)
-- **WebSocket**: Real-time notifications (`/ws`), status updates (`/status/ws`) with Bearer auth
-- **Internal API**: Create, send to user, broadcast, notify friends status change (service token)
+Notification microservice. Handles in-app notifications (list, mark read, delete) and preference settings. Provides WebSocket streams for real-time push notifications and user presence/status updates. Internal API for other services to create and broadcast notifications.
 
 ## Tech Stack
 
@@ -17,21 +13,10 @@ Notification microservice for the ft_transcendence platform. Handles in-app noti
 
 ## Quick Start
 
-### Prerequisites
-
-- Node.js 20+
-- Environment variables (see [Environment](#environment))
-
-### Install & Run
-
 ```bash
 npm install
 npm run dev
 ```
-
-- **Dev**: `npm run dev`
-- **Build**: `npm run build`
-- **Start**: `npm start` (production)
 
 Service listens on `HOST:PORT` (default `0.0.0.0:3002`).
 
@@ -41,45 +26,176 @@ Built from monorepo root; see project `Dockerfile` and `docker-compose*.yml`.
 
 ## Environment
 
-| Variable             | Required | Description                    |
-|----------------------|----------|--------------------------------|
-| `PORT`               | No       | Server port (default: 3002)    |
-| `HOST`               | No       | Bind address (default: 0.0.0.0)|
-| `USER_SERVICE_URL`   | Yes      | User service base URL          |
-| `SERVICE_TOKEN`      | Yes      | Service-to-service token       |
-| `JWT_SECRET`         | Yes      | Access token verification      |
-| `JWT_REFRESH_SECRET` | Yes      | Refresh token (if needed)      |
-| `JWT_TWO_FA`         | Yes      | 2FA token (if needed)          |
+| Variable             | Required | Description                      |
+|----------------------|----------|----------------------------------|
+| `PORT`               | No       | Server port (default: 3002)      |
+| `HOST`               | No       | Bind address (default: 0.0.0.0)  |
+| `USER_SERVICE_URL`   | Yes      | User service base URL            |
+| `SERVICE_TOKEN`      | Yes      | Service-to-service token         |
+| `JWT_SECRET`         | Yes      | Access token verification        |
 
-API prefix defaults to `/api/v1` (from core).
+---
 
-## API Base URL
+## API Endpoints
 
-- **HTTP (frontend):** `GET /api/v1/notifications`, `PATCH /:id/read`, `PATCH /read-all`, `DELETE /:id`
-- **WebSocket:** `GET /api/v1/notifications/ws`, `GET /api/v1/notifications/status/ws` — **Auth: Bearer**
-- **Internal:** `POST /api/v1/notifications/internal/...` (service token)
+Base URL: **`{NOTIFICATION_SERVICE_URL}/api/v1/notifications`**
 
-## Documentation
+All external endpoints use **Bearer** access token in `Authorization` header.
 
-- **[API Endpoints](docs/api-endpoints.md)** — HTTP endpoints, WebSocket URLs, internal API.
-- **[Frontend Integration Guide](docs/frontend-integration-guide.md)** — Flows and usage from React/Next.js.
+### Error Response Format
 
-## Project Structure
-
-```
-src/
-├── controllers/   # external (get, markRead, markAllRead, delete), internal
-├── services/      # notification, status, internal
-├── ws/            # notification.ws.controller, status.ws.controller
-├── wsManager/     # socket instances, status connections
-├── routes/        # notify, ws, internal
-├── schemas/       # Validation
-├── dto/           # Data transfer types
-└── utils/         # env, prisma
-prisma/
-└── schema.prisma
+```json
+{
+  "status": "error",
+  "error": {
+    "code": "ERROR_CODE",
+    "message": "Human-readable message",
+    "details": null
+  }
+}
 ```
 
-## License
+---
 
-Part of ft_transcendence project.
+### HTTP Endpoints
+
+#### `GET /`
+
+Get all notifications for the current user. **Auth: Bearer**
+
+**Success (200):**
+
+```json
+{
+  "status": "success",
+  "data": {
+    "count": 2,
+    "results": [
+      {
+        "id": "uuid",
+        "type": "string",
+        "message": "string",
+        "isRead": false,
+        "createdAt": "date-time"
+      }
+    ]
+  }
+}
+```
+
+---
+
+#### `PATCH /:id/read`
+
+Mark a single notification as read. **Auth: Bearer**
+
+**Params:** `id` — Notification ID (uuid)
+
+**Success (200):** `{ "status": "success", "message": "..." }`
+
+---
+
+#### `PATCH /read-all`
+
+Mark all notifications as read for the current user. **Auth: Bearer**
+
+**Success (200):** `{ "status": "success", "message": "..." }`
+
+---
+
+#### `DELETE /:id`
+
+Delete a notification. **Auth: Bearer**
+
+**Params:** `id` — Notification ID (uuid)
+
+**Success (200):** `{ "status": "success", "message": "..." }`
+
+---
+
+#### `GET /preferences`
+
+Get notification preferences. **Auth: Bearer**
+
+Defaults if not yet saved: `gameInvites: true`, `friendRequests: true`, `matchResults: true`, `systemUpdates: false`, `sounds: true`.
+
+**Success (200):**
+
+```json
+{
+  "status": "success",
+  "data": {
+    "gameInvites": true,
+    "friendRequests": true,
+    "matchResults": true,
+    "systemUpdates": false,
+    "sounds": true
+  }
+}
+```
+
+---
+
+#### `PUT /preferences`
+
+Update notification preferences. **Auth: Bearer**
+
+All fields are optional; only provided fields are updated.
+
+**Body:**
+
+```json
+{
+  "gameInvites": true,
+  "friendRequests": true,
+  "matchResults": true,
+  "systemUpdates": false,
+  "sounds": true
+}
+```
+
+**Success (200):** `{ "status": "success", "message": "..." }`
+
+---
+
+### WebSocket
+
+#### `GET /ws` (WebSocket Upgrade)
+
+Real-time notifications stream. **Auth:** Bearer via `Authorization` header or `?token=<accessToken>` query param.
+
+**URL:** `ws://{host}:{port}/api/v1/notifications/ws`
+
+On connect, server pushes unread or new notifications. Message format: `{ id, type, message, createdAt }`.
+
+---
+
+#### `GET /status/ws` (WebSocket Upgrade)
+
+Real-time presence/status updates (friends online/offline/in-game). **Auth:** Bearer via `Authorization` header or `?token=<accessToken>` query param.
+
+**URL:** `ws://{host}:{port}/api/v1/notifications/status/ws`
+
+---
+
+### Internal API (backend only)
+
+Endpoints under `/internal`: create notification, send to user, broadcast, notify friends of status change.
+
+**Auth:** Service token (`x-service-token` header). Not for frontend use.
+
+---
+
+### Summary
+
+| Method    | Path             | Auth    | Purpose                   |
+|-----------|------------------|---------|---------------------------|
+| GET       | `/`              | Bearer  | Get notifications         |
+| PATCH     | `/:id/read`      | Bearer  | Mark one as read          |
+| PATCH     | `/read-all`      | Bearer  | Mark all as read          |
+| DELETE    | `/:id`           | Bearer  | Delete notification       |
+| GET       | `/preferences`   | Bearer  | Get preferences           |
+| PUT       | `/preferences`   | Bearer  | Update preferences        |
+| WebSocket | `/ws`            | Bearer  | Real-time notifications   |
+| WebSocket | `/status/ws`     | Bearer  | Real-time status updates  |
+| HTTP      | `/internal/...`  | Service | Internal (backend only)   |
